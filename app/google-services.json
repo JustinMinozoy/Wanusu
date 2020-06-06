@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "702988285879",
+    "firebase_url": "https://wanusu-mahana.firebaseio.com",
+    "project_id": "wanusu-mahana",
+    "storage_bucket": "wanusu-mahana.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:702988285879:android:8a2c687ee0d74ac0e8da32",
+        "android_client_info": {
+          "package_name": "com.blackwizard.wanusumahana"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "702988285879-v1jphtjqqvb87stcoop3psbecip7fdai.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB3YwZAKLZWG3LgRBe75piBIgNRAjbJp2o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "702988285879-v1jphtjqqvb87stcoop3psbecip7fdai.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
