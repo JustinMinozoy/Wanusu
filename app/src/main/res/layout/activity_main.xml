@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.drawerlayout.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/drawerLayout"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -12,18 +13,25 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <include
+            android:id="@+id/mainPageToolBar"
+            layout="@layout/app_bar_layout">
+        </include>
+
         <FrameLayout
-            android:id="@+id/main-container"
+            android:id="@+id/mainContainer"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="590dp"
+            android:layout_below="@id/mainPageToolBar"
             android:layout_alignParentStart="true"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true">
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="69dp">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/all-users-posts-lists"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="637dp" />
 
         </FrameLayout>
     </RelativeLayout>
