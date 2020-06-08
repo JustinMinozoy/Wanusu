@@ -17,6 +17,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -41,7 +42,6 @@ public class LoginActivity extends AppCompatActivity {
         loadingBar = new ProgressDialog(this);
 
 
-
         NeedAccountLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -56,6 +56,17 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+
+        if (currentUser != null){
+            SendUserToMainActivity();
+        }
     }
 
     private void AllowingUserToLogin() {
