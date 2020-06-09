@@ -21,19 +21,31 @@
         <FrameLayout
             android:id="@+id/mainContainer"
             android:layout_width="match_parent"
-            android:layout_height="590dp"
+            android:layout_height="match_parent"
             android:layout_below="@id/mainPageToolBar"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginTop="69dp">
+            android:layout_alignParentStart="true">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/all-users-posts-lists"
                 android:layout_width="match_parent"
-                android:layout_height="637dp" />
+                android:layout_height="match_parent" />
 
         </FrameLayout>
+
+        <ImageButton
+            android:id="@+id/addNewPost"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_above="@+id/mainContainer"
+            android:layout_alignParentEnd="true"
+            android:layout_marginRight="12dp"
+            android:layout_marginBottom="4dp"
+            android:background="@color/colorPrimaryDark"
+            android:baselineAlignBottom="false"
+            android:focusableInTouchMode="false"
+            android:scaleType="centerCrop"
+            android:src="@drawable/add_post_high" />
+
     </RelativeLayout>
 
     <com.google.android.material.navigation.NavigationView

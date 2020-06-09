@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.widget.Toolbar;
@@ -46,43 +47,14 @@ public class MainActivity extends AppCompatActivity {
 
     String currentUserID;
 
+    private ImageButton addNewPostButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         firebaseAuth = FirebaseAuth.getInstance();
-
-        //
-        //different suggestion
-        //currentUserID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
-        // if (firebaseAuth.getCurrentUser() == null) {
-        //            SendUserToLoginActivity();
-        //        }
-        //        else{
-        //            currentUserID = firebaseAuth.getCurrentUser().getUid();
-        //        }
-        //
-        //
-        //different suggestion
-        //if(firebaseAuth.getCurrentUser().getUid() == null){
-        //            currentUserID = "";
-        //        }else{
-        //            currentUserID = firebaseAuth.getCurrentUser().getUid();
-        //        }
-        //
-        //
-        //
-        ////different suggestion
-        //firebaseAuth=FirebaseAuth.getInstance();
-        //        if(firebaseAuth.getCurrentUser()!=null) {
-        //            currentUserID = firebaseAuth.getCurrentUser().getUid();
-        //
-        //        }
-        //        else{
-        //            currentUserID ="";
-        //        }
-
 
 
         currentUserID = firebaseAuth.getCurrentUser().getUid(); //this line has a problem can still be removed later after modification
@@ -104,6 +76,8 @@ public class MainActivity extends AppCompatActivity {
 
         navigationProfileImageView = navView.findViewById(R.id.nav_profile);
         navigationProfileUsername = navView.findViewById(R.id.nav_profile_username);
+
+        addNewPostButton = findViewById(R.id.addNewPost);
 
         UserReference.child(currentUserID).addValueEventListener(new ValueEventListener() {
             @Override
@@ -147,8 +121,20 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        addNewPostButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendUserToPostActivity();
+            }
+        });
+
     }
 
+    private void sendUserToPostActivity() {
+        Intent addNewPostIntent = new Intent(MainActivity.this, PostActivity.class);
+        startActivity(addNewPostIntent);
+
+    }
 
     //this checks whether the user is registered or not
     @Override
@@ -220,6 +206,10 @@ public class MainActivity extends AppCompatActivity {
     private void UserMenuSelector(MenuItem item) {
         switch (item.getItemId())
         {
+            case R.id.nav_post:
+                sendUserToPostActivity();
+                break;
+
             case R.id.nav_profile:
                 Toast.makeText(this, "Profile", Toast.LENGTH_SHORT).show();
                 break;
