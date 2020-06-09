@@ -40,5 +40,11 @@ dependencies {
     //Circular image view dependency
     implementation 'de.hdodenhof:circleimageview:3.1.0'
 
+    //ImageCrop library
+    implementation 'com.theartofdev.edmodo:android-image-cropper:2.8.+'
+
+
+    //implementation 'com.firebaseui:firebase-ui-database:2.1.1'
+
 
 }
