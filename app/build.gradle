@@ -7,7 +7,7 @@ android {
 
     defaultConfig {
         applicationId "com.blackwizard.wanusumahana"
-        minSdkVersion 16
+        minSdkVersion 19
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
@@ -45,6 +45,9 @@ dependencies {
 
 
     //implementation 'com.firebaseui:firebase-ui-database:2.1.1'
+
+    //Picasso library
+    implementation 'com.squareup.picasso:picasso:2.71828'
 
 
 }

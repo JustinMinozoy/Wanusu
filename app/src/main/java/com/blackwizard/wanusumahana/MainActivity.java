@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.widget.Toolbar;
 
@@ -23,6 +24,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.DatabaseRegistrar;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
+
+import java.util.Objects;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -35,12 +41,52 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     private DatabaseReference UserReference;
 
+    private CircleImageView navigationProfileImageView;
+    private TextView navigationProfileUsername;
+
+    String currentUserID;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         firebaseAuth = FirebaseAuth.getInstance();
+
+        //
+        //different suggestion
+        //currentUserID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
+        // if (firebaseAuth.getCurrentUser() == null) {
+        //            SendUserToLoginActivity();
+        //        }
+        //        else{
+        //            currentUserID = firebaseAuth.getCurrentUser().getUid();
+        //        }
+        //
+        //
+        //different suggestion
+        //if(firebaseAuth.getCurrentUser().getUid() == null){
+        //            currentUserID = "";
+        //        }else{
+        //            currentUserID = firebaseAuth.getCurrentUser().getUid();
+        //        }
+        //
+        //
+        //
+        ////different suggestion
+        //firebaseAuth=FirebaseAuth.getInstance();
+        //        if(firebaseAuth.getCurrentUser()!=null) {
+        //            currentUserID = firebaseAuth.getCurrentUser().getUid();
+        //
+        //        }
+        //        else{
+        //            currentUserID ="";
+        //        }
+
+
+
+
+        currentUserID = firebaseAuth.getCurrentUser().getUid(); //this line has a problem can still be removed later after modification
         UserReference = FirebaseDatabase.getInstance().getReference().child("Users");
 
         toolbar = findViewById(R.id.mainPageToolBar);
@@ -56,6 +102,28 @@ public class MainActivity extends AppCompatActivity {
 
         navigationView = findViewById(R.id.navigationView);
         View navView = navigationView.inflateHeaderView(R.layout.navigation_header);
+
+        navigationProfileImageView = navView.findViewById(R.id.nav_profile);
+        navigationProfileUsername = navView.findViewById(R.id.nav_profile_username);
+
+        UserReference.child(currentUserID).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists())
+                {
+                    String fullName = dataSnapshot.child("fullname").getValue().toString();
+                    String image = dataSnapshot.child("Profile Image").getValue().toString();
+
+                    navigationProfileUsername.setText(fullName);
+                    Picasso.get().load(image).placeholder(R.drawable.profile).into(navigationProfileImageView);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
