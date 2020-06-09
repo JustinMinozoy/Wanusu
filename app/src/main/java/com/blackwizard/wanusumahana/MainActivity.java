@@ -85,7 +85,6 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
         currentUserID = firebaseAuth.getCurrentUser().getUid(); //this line has a problem can still be removed later after modification
         UserReference = FirebaseDatabase.getInstance().getReference().child("Users");
 
@@ -111,11 +110,23 @@ public class MainActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists())
                 {
-                    String fullName = dataSnapshot.child("fullname").getValue().toString();
-                    String image = dataSnapshot.child("Profile Image").getValue().toString();
 
-                    navigationProfileUsername.setText(fullName);
-                    Picasso.get().load(image).placeholder(R.drawable.profile).into(navigationProfileImageView);
+                    if (dataSnapshot.hasChild("fullname"))
+                    {
+                        String fullName = dataSnapshot.child("fullname").getValue().toString();
+                        navigationProfileUsername.setText(fullName);
+                    }
+                    if (dataSnapshot.hasChild("Profile Image"))
+                    {
+                        String image = dataSnapshot.child("Profile Image").getValue().toString();
+
+                        Picasso.get().load(image).placeholder(R.drawable.profile).into(navigationProfileImageView);
+                    }
+                    else
+                    {
+                        Toast.makeText(MainActivity.this, "Profile Name do not exist", Toast.LENGTH_SHORT).show();
+                    }
+
                 }
             }
 

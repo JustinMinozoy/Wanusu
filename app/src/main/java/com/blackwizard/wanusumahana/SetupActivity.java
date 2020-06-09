@@ -94,9 +94,17 @@ public class SetupActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists())
                 {
-                    String image = dataSnapshot.child("Profile Image").getValue().toString();
-                    //Picasso.with(SetupActivity.this).load(image).placeholder(R.drawable.profile).into(profileImageView); also has a problem
-                    Picasso.get().load(image).placeholder(R.drawable.profile).into(profileImageView);
+
+                    if (dataSnapshot.hasChild("Profile Image"))
+                    {
+                        String image = dataSnapshot.child("Profile Image").getValue().toString();
+                        //Picasso.with(SetupActivity.this).load(image).placeholder(R.drawable.profile).into(profileImageView); also has a problem
+                        Picasso.get().load(image).placeholder(R.drawable.profile).into(profileImageView);
+                    }
+                    else
+                    {
+                        Toast.makeText(SetupActivity.this, "Please select profile image first!", Toast.LENGTH_SHORT).show();
+                    }
 
                 }
             }
