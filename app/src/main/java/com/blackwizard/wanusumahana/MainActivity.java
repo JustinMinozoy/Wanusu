@@ -1,35 +1,37 @@
 package com.blackwizard.wanusumahana;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.recyclerview.widget.RecyclerView;
-//import android.widget.Toolbar;
-
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-import androidx.appcompat.widget.Toolbar;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.DatabaseRegistrar;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
-import java.util.Objects;
-
 import de.hdodenhof.circleimageview.CircleImageView;
+
+//import android.widget.Toolbar;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -40,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
     private ActionBarDrawerToggle actionBarDrawerToggle;
 
     private FirebaseAuth firebaseAuth;
-    private DatabaseReference UserReference;
+    private DatabaseReference UserReference, postReference;
 
     private CircleImageView navigationProfileImageView;
     private TextView navigationProfileUsername;
@@ -59,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
 
         currentUserID = firebaseAuth.getCurrentUser().getUid(); //this line has a problem can still be removed later after modification
         UserReference = FirebaseDatabase.getInstance().getReference().child("Users");
+        postReference = FirebaseDatabase.getInstance().getReference().child("Posts");
 
         toolbar = findViewById(R.id.mainPageToolBar);
         setSupportActionBar(toolbar);
@@ -72,6 +75,14 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         navigationView = findViewById(R.id.navigationView);
+
+        postList = findViewById(R.id.all_users_posts_lists);
+        postList.setHasFixedSize(true);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager.setReverseLayout(true);
+        linearLayoutManager.setStackFromEnd(true);
+        postList.setLayoutManager(linearLayoutManager);
+
         View navView = navigationView.inflateHeaderView(R.layout.navigation_header);
 
         navigationProfileImageView = navView.findViewById(R.id.nav_profile);
@@ -127,6 +138,96 @@ public class MainActivity extends AppCompatActivity {
                 sendUserToPostActivity();
             }
         });
+
+        displayAllUsersPosts();
+
+    }
+
+
+
+
+
+
+    private void displayAllUsersPosts()
+    {
+        FirebaseRecyclerAdapter<Posts, postsViewHolder> firebaseRecyclerAdapter =
+                new FirebaseRecyclerAdapter<Posts, postsViewHolder>
+                        (
+                                Posts.class,
+                                R.layout.all_posts_layout,
+                                postsViewHolder.class,
+                                postReference
+                        )
+                {
+                    @Override
+                    protected void populateViewHolder(postsViewHolder viewHolder, Posts model, int position)
+                    {
+                        viewHolder.setFullname(model.getFullname());
+                        viewHolder.setTime(model.getTime());
+                        viewHolder.setDate(model.getDate());
+                        viewHolder.setDescription(model.getDescription());
+                        //viewHolder.setProfileImage(getApplicationContext(), model.getProfileImage());
+                        //viewHolder.setP(getApplicationContext(), model.getPostimage());
+                        viewHolder.setProfileImage(getApplicationContext(), model.getProfileImage());
+                        viewHolder.setPostimage(getApplicationContext(), model.getPostImage());
+                    }
+                };
+        postList.setAdapter(firebaseRecyclerAdapter);
+    }
+
+
+
+
+
+
+
+
+
+
+
+    public static class postsViewHolder extends RecyclerView.ViewHolder{
+
+        View view;
+
+        public postsViewHolder(@NonNull View itemView) {
+            super(itemView);
+
+            view = itemView;
+
+        }
+
+        public void setFullname(String fullname)
+        {
+            TextView username = view.findViewById(R.id.postUsername);
+            username.setText(fullname);
+        }
+
+        public void setProfileImage(Context ctx, String profileImage)
+        {
+            CircleImageView image = view.findViewById(R.id.postProfileImage);
+           // Picasso.get(ctx).load(profileImage).into(image);
+            Picasso.get().load(profileImage).placeholder(R.drawable.profile).into(image);
+        }
+        public void setTime(String time)
+        {
+            TextView PostTime = view.findViewById(R.id.postTime);
+            PostTime.setText("   " + time);
+        }
+        public void setDate(String date)
+        {
+            TextView PostDate = view.findViewById(R.id.postDate);
+            PostDate.setText("   " + date);
+        }
+        public void setDescription(String description)
+        {
+            TextView PostDescription = view.findViewById(R.id.postDescription);
+            PostDescription.setText(description);
+        }
+        public void setPostimage(Context ctx1,  String postimage)
+        {
+            ImageView PostImage = view.findViewById(R.id.postImage);
+            Picasso.get().load(postimage).into(PostImage);
+        }
 
     }
 
